@@ -1,14 +1,24 @@
 <?php
 include 'db.php';
 
-$nombre = $_POST['txt_cliente'];
-$email  = $_POST['txt_email'];
+// Sanitizar y validar inputs
+$nombre = trim($_POST['txt_cliente']);
+$email  = trim($_POST['txt_email']);
 
-$query = "INSERT INTO clientes (nombre, email) VALUES ('$nombre', '$email')";
+// Validaciones básicas
+if (empty($nombre) || empty($email)) {
+    die("El nombre y email son requeridos.");
+}
 
-if(mysqli_query($conexion, $query)){
+// Usar prepared statements para seguridad
+$stmt = mysqli_prepare($conexion, "INSERT INTO clientes (nombre, email) VALUES (?, ?)");
+mysqli_stmt_bind_param($stmt, "ss", $nombre, $email);
+
+if (mysqli_stmt_execute($stmt)) {
     header("Location: index.php?status=success");
 } else {
-    echo "Error: " . mysqli_error($conexion);
+    echo "Error al guardar: " . mysqli_error($conexion);
 }
+
+mysqli_stmt_close($stmt);
 ?>
