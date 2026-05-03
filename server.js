@@ -7,7 +7,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Conexión a la DB
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -15,7 +14,6 @@ const db = mysql.createConnection({
     database: 'inventario_db'
 });
 
-// Rutas para Clientes
 app.post('/clientes', (req, res) => {
     const { nombre, email, telefono } = req.body;
     const query = 'INSERT INTO clientes (nombre, email, telefono) VALUES (?, ?, ?)';
