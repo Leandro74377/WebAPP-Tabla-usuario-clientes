@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Carga de Datos</title>
+    <style>
+        body { font-family: sans-serif; display: flex; gap: 50px; padding: 20px; }
+        form { display: flex; flex-direction: column; gap: 10px; border: 1px solid #ccc; padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Formulario Clientes -->
+    <form id="formCliente">
+        <h3>Registrar Cliente</h3>
+        <input type="text" id="nomC" placeholder="Nombre" required>
+        <input type="email" id="emailC" placeholder="Email" required>
+        <input type="text" id="telC" placeholder="Teléfono">
+        <button type="submit">Guardar Cliente</button>
+    </form>
+
+    <!-- Formulario Productos -->
+    <form id="formProducto">
+        <h3>Registrar Producto</h3>
+        <input type="text" id="nomP" placeholder="Nombre Producto" required>
+        <input type="number" id="preP" placeholder="Precio" step="0.01" required>
+        <input type="number" id="stkP" placeholder="Stock" required>
+        <button type="submit">Guardar Producto</button>
+    </form>
+
+    <script>
+        // Función genérica para enviar datos
+        const enviarDatos = async (url, data) => {
+            const resp = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            alert(await resp.text());
+        };
+
+        document.getElementById('formCliente').onsubmit = (e) => {
+            e.preventDefault();
+            enviarDatos('http://localhost:3000/clientes', {
+                nombre: document.getElementById('nomC').value,
+                email: document.getElementById('emailC').value,
+                telefono: document.getElementById('telC').value
+            });
+        };
+
+        document.getElementById('formProducto').onsubmit = (e) => {
+            e.preventDefault();
+            enviarDatos('http://localhost:3000/productos', {
+                nombre_producto: document.getElementById('nomP').value,
+                precio: document.getElementById('preP').value,
+                stock: document.getElementById('stkP').value
+            });
+        };
+    </script>
+</body>
+</html>
